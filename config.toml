@@ -1,0 +1,44 @@
+baseurl = "/"
+languageCode = "en-us"
+title = "Dashjay's"
+theme = "hugo-classic"
+googleAnalytics = ""
+ignoreFiles = ["\\.Rmd$", "_files$", "_cache$"]
+enableEmoji = true
+footnotereturnlinkcontents = "↩"
+
+[permalinks]
+    post = "/post/:year/:month/:day/:slug/"
+
+[[menu.main]]
+    name = "resume"
+    url = "/resume"
+    weight = 1
+
+[[menu.main]]
+    name = "日报"
+    url = "/daily"
+    weight = 2
+
+[[menu.main]]
+    name = "Intro"
+    url = "/intro"
+    weight = 3
+
+[[menu.main]]
+    name = "EN"
+    url = "/EN"
+    weight = 4
+    
+[[menu.main]]
+    name = "POSTS"
+    url = "/post"
+    weight = 5
+    
+[[menu.feed]]
+    name = "Subscribe"
+    url = "/index.xml"
+
+[params]
+    footer = "Github | [Github](https://github.com/dashjay)"
+    custom_css = ["css/theme-override.css"]
