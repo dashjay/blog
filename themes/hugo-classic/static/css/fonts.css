@@ -1,4 +1,4 @@
-@import url('https://rsms.me/inter/inter.css');
+@import url('./inter.css');
 html { font-family:
         'Inter',
         sans-serif,
@@ -27,5 +27,5 @@ code {
     "Apple Color Emoji",
     "Segoe UI Emoji",
     "Segoe UI Symbol"
-  font-size: 85%;
+    "font-size: 85%";
 }

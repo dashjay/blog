@@ -1,17 +1,33 @@
-sudo: false
-language: go
-git:
-  depth: 1
-install: go get github.com/gohugoio/hugo
-script: hugo
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $githubToken
-  on:
-    branch: master
-  local_dir: public
-  repo: dashjay/dashjay.github.io
-  target_branch: master
-  email: dashjay@aliyun.com
-  name: dashjay
+dist: xenial
+language: python
+python: 3.7
+
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get -yq install apt-transport-https
+  - pip install mkdocs mkdocs-material
+
+install:
+  # install latest hugo release version
+  - wget -qO- https://api.github.com/repos/gohugoio/hugo/releases/latest | sed -r -n '/browser_download_url/{/Linux-64bit.deb/{s@[^:]*:[[:space:]]*"([^"]*)".*@\1@g;p;q}}' | xargs wget
+  - sudo dpkg -i hugo*.deb
+  - rm -rf public 2> /dev/null
+
+before_script:
+  - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+  - git config --global user.email dashjay@aliyun.com
+  - git config --global user.name dashjay
+
+script:
+  - cd learn-cpp
+  - mkdocs build -c -d ../static/learncpp
+  - hugo -d ./dist/
+
+after_success:
+  - DATE=$(date)
+  - cd dist
+  - git init
+  - git remote add origin https://dashjay:${password}@github.com/dashjay/dashjay.github.io
+  - git add .
+  - git commit -m "${DATE}"
+  - git push origin master -f

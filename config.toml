@@ -1,7 +1,7 @@
 baseurl = "/"
 languageCode = "en-us"
 title = "Dashjay's"
-theme = "hugo-classic"
+theme = "hugo-lithium-theme"
 googleAnalytics = ""
 ignoreFiles = ["\\.Rmd$", "_files$", "_cache$"]
 enableEmoji = true
@@ -11,34 +11,39 @@ footnotereturnlinkcontents = "↩"
     post = "/post/:year/:month/:day/:slug/"
 
 [[menu.main]]
-    name = "resume"
-    url = "/resume"
+    name = "Home"
+    url = "/"
     weight = 1
+
+[[menu.main]]
+    name = "LearnCPP"
+    url = "/learncpp"
+    weight = 5
+
+[[menu.main]]
+    name = "Resume"
+    url = "/resume"
+    weight = 10
 
 [[menu.main]]
     name = "日报"
     url = "/daily"
-    weight = 2
+    weight = 20
 
 [[menu.main]]
     name = "Intro"
     url = "/intro"
-    weight = 3
+    weight = 30
 
 [[menu.main]]
     name = "EN"
     url = "/EN"
-    weight = 4
+    weight = 40
     
 [[menu.main]]
-    name = "POSTS"
-    url = "/post"
-    weight = 5
-    
-[[menu.feed]]
-    name = "Subscribe"
+    name = "RSS"    
+    weight = 60
     url = "/index.xml"
 
 [params]
-    footer = "Github | [Github](https://github.com/dashjay)"
     custom_css = ["css/theme-override.css"]

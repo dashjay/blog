@@ -10,3 +10,10 @@ header {
     background: #7954d0;
     border-bottom: 1px solid rgb(250, 250, 250);
 }
+element {
+    color: #f8f8f2;
+    background-color: #ffffff !important;; 
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+}

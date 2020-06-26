@@ -88,12 +88,15 @@ header .current a {
 /* Code Boxes */
 pre {
   border: 1px solid #ddd;
-  box-shadow: 5px 5px 5px #eee;
   background: #f8f8f8;
-  padding: 1em;
+  background-color: #f8f8f8;
+  /* padding: 1em; */
   overflow-x: auto;
 }
-code { background: #f9f9f9; }
+code { 
+  background: #f9f9f9;
+  font-size: large;
+ }
 pre code { background: none; }
 
 /* Images, tables, misc. */
