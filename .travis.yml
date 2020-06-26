@@ -21,6 +21,7 @@ before_script:
 script:
   - cd learn-cpp
   - mkdocs build -c -d ../static/learncpp
+  - cd ..
   - hugo -d ./dist/
 
 after_success:
