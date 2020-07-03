@@ -9,7 +9,7 @@ before_install:
 
 install:
   # install latest hugo release version
-  - wget -qO- https://api.github.com/repos/gohugoio/hugo/releases/latest | sed -r -n '/browser_download_url/{/Linux-64bit.deb/{s@[^:]*:[[:space:]]*"([^"]*)".*@\1@g;p;q}}' | xargs wget
+  - wget https://github.com/gohugoio/hugo/releases/download/v0.73.0/hugo_0.73.0_Linux-64bit.deb
   - sudo dpkg -i hugo*.deb
   - rm -rf public 2> /dev/null
 
