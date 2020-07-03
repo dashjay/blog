@@ -24,32 +24,33 @@ author: 'dashjay'
 
 ```go
 conn, err := lis.Accept()
-		if err != nil {
-			log.Printf("[x] accept error, detail: [%s]", conn)
-			return
-		}
-conn2, err := net.Dial("tcp", target)
-		if err != nil {
-			log.Printf("[x] connect to target error, detail: [%s]", err)
-			return
-		}
-log.Printf("[+] transfer between [%s] <-> [%s]", conn.LocalAddr(), conn2.RemoteAddr())
+	if err != nil {
+		log.Printf("[x] accept error, detail: [%s]", conn)
+		return
+	}
+	conn2, err := net.Dial("tcp", target)
+	if err != nil {
+		log.Printf("[x] connect to target error, detail: [%s]", err)
+		return
+	}
+	log.Printf("[+] transfer between [%s] <-> [%s]", 
+             conn.LocalAddr(), conn2.RemoteAddr())
+	go func() {
+		var wg sync.WaitGroup
+		wg.Add(2)
 		go func() {
-			var wg sync.WaitGroup
-			wg.Add(2)
-			go func() {
-				io.Copy(conn2, conn)
-				wg.Done()
-			}()
-
-			go func() {
-				io.Copy(conn, conn2)
-				wg.Done()
-			}()
-			wg.Wait()
-			conn.Close()
-			conn2.Close()
+			io.Copy(conn2, conn)
+			wg.Done()
 		}()
+
+		go func() {
+			io.Copy(conn, conn2)
+			wg.Done()
+		}()
+		wg.Wait()
+		conn.Close()
+		conn2.Close()
+	}()
 ```
 
 核心仅仅这一段代码，即可完成，`goroutine`这个机制真的给我们提供了太多的便利。
@@ -68,3 +69,13 @@ log.Printf("[+] transfer between [%s] <-> [%s]", conn.LocalAddr(), conn2.RemoteA
 ```
 
 本模式大量基于http包来编写，主要工作在中间件开发上。
+
+
+
+### blend模式
+
+混合两种模式，并且创造出一个兼具两者行为优点的蜜罐。
+
+
+
+以上的代码开源在[superlcx](github.com/dashjay/superlcx)

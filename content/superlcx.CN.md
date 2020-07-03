@@ -11,15 +11,14 @@
   <a href="https://travis-ci.com/github/dashjay/superlcx"><img src="https://travis-ci.com/dashjay/superlcx.svg?branch=master" alt="Build Status"></a>
   <a href="https://github.com/dashjay/superlcx/actions?query=workflow%3Aauto_release"><img src="https://github.com/dashjay/superlcx/workflows/auto_release/badge.svg" alt="Build Status"></a>
 </div>
-
 [EN](/superlcx)[中文]
 
 # 介绍
-一个高性能的工具，具有丰富的中间件。SuperLcx为请求做代理，并返回服务端的返回值，过程中调用一些中间件，来实现一些操作：
+一个高性能的工具，具有丰富的中间件。`SuperLcx` 为请求做代理，并返回服务端的返回值，过程中调用一些中间件，来实现一些操作：
 - 修改请求值（转发请求体）。
-- 修改返回值（sub_filter）。
-- 记录请求和返回体（dump流量）。
-- hook其他操作，例如通过grpc实现一个python hook，或通过lua js 等解释语言来改变中间件的行为。
+- 修改返回值（`sub_filter`）。
+- 记录请求和返回体（`dump`流量）。
+- hook其他操作，例如通过`grpc`实现一个`python hook`，或通过`lua js` 等解释语言来改变中间件的行为。
 - 实现你自己的中间件……
 
 # 用法

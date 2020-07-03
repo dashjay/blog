@@ -14,4 +14,4 @@ title: INDEX
 
 每天写Blog过于艰难，只能靠写写[**流水账**](./daily)才能勉强维持得了生活这样子。
 
-## Blog
+## Blogs

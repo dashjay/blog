@@ -1,7 +1,7 @@
 baseurl = "/"
 languageCode = "en-us"
 title = "Dashjay's"
-theme = "hugo-lithium-theme"
+theme = "hugo-lithium"
 googleAnalytics = ""
 ignoreFiles = ["\\.Rmd$", "_files$", "_cache$"]
 enableEmoji = true
