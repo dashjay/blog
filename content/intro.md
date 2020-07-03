@@ -2,43 +2,44 @@
 title: Intro
 ---
 
-# 项目经历
+## 项目经历
 
-## 2018年5月(开始写代码)
+### 2018年5月(开始写代码)
 
-1. 从Unity3D切入我的代码生涯，做了有关人体3D展示和工业展示使用的项目，成功交付。
+从Unity3D切入我的代码生涯，做了有关人体3D展示和工业展示使用的项目，成功交付。
 
-  #### 2018年11月(开始使用PHP)
+### 2018年11月(开始使用PHP)
 
-2. 使用Laravel，ThinkPHP等框架，搭配一些脚本(python,bash)等开始编写一个OJ，自行使用了Verilog编译器(ModelSIM和Iverilog)完成了Verilog语言的代码测评，于2019年7月完成项目。项目并没有上线，而是被商业项目替代。
+使用Laravel，ThinkPHP等框架，搭配一些脚本(python,bash)等开始编写一个OJ，自行使用了Verilog编译器(ModelSIM和Iverilog)完成了Verilog语言的代码测评，于2019年7月完成项目。项目并没有上线，而是被商业项目替代。
 
-  #### 2019年8月(开始使用golang)
+### 2019年8月(开始使用golang)
 
-3. 上手的目的是为了开发一个高性能的LBS游戏，结果一发不可收拾。在简单学习过语言的基础使用后，进一步了解了Goruntine和chan等操作，熟悉了常见的并发代码习惯之后，开始编写服务类程序。
+上手的目的是为了开发一个高性能的LBS游戏，结果一发不可收拾。在简单学习过语言的基础使用后，进一步了解了Goruntine和chan等操作，熟悉了常见的并发代码习惯之后，开始编写服务类程序。
 
-  - 多线程爬虫
-  - 论坛和类论坛程序
+- 多线程爬虫
+- 论坛和类论坛程序
 
-# 过去
+## 过去
 
 1998年出生后直到18年5月才接触代码，当时Kesa教我写代码，我沉迷其中，成绩一落千丈，但是还是没办法......成绩比较差，出国的打算也没了，但是我的一堆朋友们(Vincente,HW,XRM,DYF,KESA)等等都帮我很多，然后我成功去海洋大学交换了一个学期，整理了一下心态......开始新的一年了2020
 
---------------------------------------------------------------------------------
 
---------------------------------------------------------------------------------
+## Dashjay's
 
-## 我的开始
+My name is Dashjay, these are what I like.
 
-"公共场所不能祷告"，我小声对前面那个回子说，"没人看你表演，别装模作样了"。那位小哥年龄不大，养着一堆胡子，快速的在脑子中盘算了一番并问我，"你是大学生么？"
+- Run
+- Drink IceCola (drug like treatment)
 
-"现在还不是，不过马上就是了"。我抬起头望着外面贵州的山水，现在是2017年从昆明出发已经`4`小时了，我还没离开贵州。一共要坐34个小时才能到北京西，我对北京充满了幻想和恐惧，对他的印象是，它是一个节奏十分快的城市，雾霾很严重，很看不起我们山里人。为此父母嘱咐我专门去买了几件体面的衣裳，怕我被同学面嘲笑。
+## Working
 
-`34`，我对这个数字印象太深刻了，深刻到超过我女朋友`155`的身高。我女朋友在昆明，而我去了北京。耳机很快没电了，中途我去厕所换裤子，汗量巨大的我，一会儿就湿了一屁股。火车的厕所实在不敢恭维，有些人把排泄物弄到外面了，在里面换裤子就是我的错误，差点就......算了，有味道的话我少说几句。
+1. Participate in a Unity3D project which display steelmaking to people.
+2. After that I made a Project demonstrat 中医(Traditional Chinese Medical) acupoint on body.
+3. Then I pay my attention into a project USTBOJ, which help teachers and students. teacher can put subject they made and students can make solutions on it. then teacher Can look students' completion rate.(In this project I am in charge of backend.Then I started coding again, made a Judge on SystemVerilog base on Modelsim)
+4. I wrote a lot of go server for many field. Online Game, Web Server....I will continue for a long time.
 
-中途有人聊天文地理，聊国家政治，但是没有一个人敢聊自己，我相信，能买火车硬座34小时的人，一定有说不完的故事。中途我去走廊站一会儿，看到一个没有坐票的姑娘蜷缩在厕所门口，带着一个快超过她身体那么大的皮箱。我相信里面除了一些棉被衣物之外，估计没什么其他东西。我示意她去坐我的位置，并轻声表示我去站一会。她摇了摇头，而我并没有多停留一秒，也没有对她的拒绝感到惊讶，也许在将近`20`个小时的蜷缩下，她已经神志不清了，只想抱紧自己的箱子不要被其他人偷走。
+## History
 
-我站在火车连接处，山里的火光吸引了我，回头又看到一个姑娘在另一头吸烟。每个人刚上车的时候是那么体面，高跟鞋黑丝袜，香水味搭配整齐的头发，到了晚上看起来又是那么狼狈不堪，但是又习以为常，命运把我们这群人聚集在一起，`317`块的低廉票价，`2080`公里。算下来`0.15`元一公里。算着算着我就到了我的座位，我才走`10`几分钟上面就坐了个胖小伙，假装睡着的样子，我拍了拍他的肩膀，看着他假装极其不耐烦的站起来坐到地上，我敢说这小伙子胖乎乎的平时肯定是一个大好人，我坐下，陷入了沉思......
+Born in 1998, Yunnan, China. Never code before University(2018-05). A senior man named Kesa who told and teach me what is coding, then I fall in love with it.But not for long, I find my grade was getiing worse, I can't give up coding.
 
-硬是坐到了到北京西了，辗转坐公交车到了海淀，我还记得那个地名，"塔平朗秋园"，只有这里才能找到百元以内的"酒店"，说是酒店，其实是连身份证都不要的黑酒店。在里面溜达了半天房东带我进门，客厅的一个角落，一张床，连行李箱都摊不开，但是和我想象的差不多，这就是北京。我望着房东嘱咐我尽量不要关闭的客厅灯，想着隔壁还住进了好几个人，他们都有怎样的故事，睡前我悄悄把电脑藏进了枕头下面，毕竟我是计算机专业的，电脑就是我的命......2017
-
-两年前写的了，自卑的我已经逐渐成长，快要毕业于海淀村办科技大学，准备毕业之后干点什么呢？迷茫。
+When I was confused my friends (Vincente, Hw, Xrm, Dyf, Kesa) help me a lot. We live in a laboratory 806\. Time past rapidly, I apply for Exchange students to OUC and get offer. Tsingtao is such a beautiful place...

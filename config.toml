@@ -36,14 +36,31 @@ footnotereturnlinkcontents = "↩"
     weight = 30
 
 [[menu.main]]
-    name = "EN"
-    url = "/EN"
-    weight = 40
-    
-[[menu.main]]
-    name = "RSS"    
+    name = "SuperLcx"    
     weight = 60
-    url = "/index.xml"
+    url = "/superlcx.CN"
 
 [params]
     custom_css = ["css/theme-override.css"]
+
+[markup]
+  defaultMarkdownHandler = "goldmark"
+    [markup.goldmark]
+        [markup.goldmark.renderer]
+        unsafe = true
+    [markup.tableOfContents]
+        endLevel = 3
+        ordered = false
+        startLevel = 2    
+    [markup.highlight]
+        codeFences = true
+        guessSyntax = false
+        lineNoStart = 1
+        lineNos = false
+        lineNumbersInTable = false
+        noClasses = true
+        style = "dracula"
+        tabWidth = 4
+
+[frontmatter]
+lastmod = ["lastmod", ":fileModTime", ":default"]

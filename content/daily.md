@@ -188,6 +188,12 @@ title: Daily
 
 3. 今天要做一个几页slide明天装逼一下，教大家打打比赛。
 
-4. 给自己的博客上传写了一个脚本，发现，反正不是生产环境，可以使用git push -f这种凶猛操作。`go git push -f git@github.com:dashjay/dashjay.github.io.git master`。反正也不用关心之前的操作。
+4. 给自己的博客上传写了一个脚本，发现，反正不是生产环境，可以使用git push -f这种凶猛操作。
+
+```bash
+go git push -f git@github.com:dashjay/dashjay.github.io.git master
+```
+
+。反正也不用关心之前的操作。
 
 [^1]: 自嗨就是发现某个IDE好帅，哇🤩，然后查看配置，各种花哨，玩了一下午，终于配置好了，其实并没有提高什么生产力。🤩哇发现这个好帅，Hexo用了觉得Hugo帅，一会又反过来。一会儿部署到Netlify，一会部署到github。我2019年至少有10天时间就这么白白浪费了。

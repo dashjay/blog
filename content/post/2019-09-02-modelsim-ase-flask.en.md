@@ -15,16 +15,17 @@ image: ''
 二话不说先甩上Github连接
 [Verilog-Judge-USTB](https://github.com/dashjay/Verilog-Judge-USTB)
 
-# Verilog-Judge-USTB
+## Verilog-Judge-USTB
+
 来自北京科技大学某小组的一个verilog的评测沙箱，基于Flask编写
 
-A verilog online judger from USTB, based on Flask-python 
+A verilog online judger from USTB, based on Flask-python
 
-### Usage
+## Usage
 
 **构建**(build)
 
-```
+```bash
 git clone https://github.com/dashjay/Verilog-Judge-USTB.git
 cd Verilog-Judge-USTB
 docker build . -t verilog-judge
@@ -36,18 +37,7 @@ docker build . -t verilog-judge
 docker run verilog-judge -v ./modelsim_ase:/root/modelsim_ase -p 33778:5000
 ```
 
-[Modelsim_ase](http://114.55.92.2:1081/index.php?share/file&user=1&sid=upvg35qf)
-
-以上是modelsim的下载地址
-
-`MD5 (modelsim_ase.7z) = 69a73347f20b1535db67de68e7dd538d`
-
-`size:186M`
-
-解压后大小1.6GB
-
->  内部指定的modelsim_ase来自FPGA微软的免费软件Quartus Lite 中的modelsim组件
->
+> 内部指定的modelsim_ase来自FPGA微软的免费软件Quartus Lite 中的modelsim组件，
 > docker内部运行的端口是5000，开在外部
 
 **测试**(test)
@@ -60,8 +50,6 @@ python test.py | python -m json.tool
 ----
 
 > 以下是测试输出
->
-> The following is the test output
 
 ```json
 {
@@ -81,9 +69,8 @@ python test.py | python -m json.tool
 
 ### thanks
 
-[Explainaur](https://github.com/orgs/806Cypher/people/Explainaur) 编写了最复杂的shell脚本
+[Explainaur](https://github.com/orgs/806Cypher/people/Explainaur) 编写了复杂的shell脚本
 
-在下只写了点破Web服务并且测试了一下
+[dashjay](https://github.com/dashjay)写了Web服务进行测试了一下
 
-> 看下另一篇文章[使用Modelsim中的CommandTools 进行仿真]可以了解其背后的工作原理
-
+> 看下另一篇文章[使用Modelsim中的CommandTools 进行仿真](/post/2019/07/27/modelsim-commandtools/)可以了解其背后的工作原理

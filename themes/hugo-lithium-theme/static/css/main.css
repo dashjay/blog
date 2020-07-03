@@ -1,3 +1,5 @@
+
+
 html,
 body {
   margin: 0;
@@ -36,6 +38,11 @@ code {
 img {
   max-width: 100%;
   height: auto;
+}
+
+pre {
+  border-radius: 1% ;
+  padding-left: 2%;
 }
 
 .wrapper {
@@ -158,16 +165,7 @@ img {
   background: #e5e5e5;
 }
 
-.highlight {
-  border-radius: 3px;
-  position: relative;
-  margin: 40px 0;
-  font-size: 14px;
-}
 
-.highlight pre {
-  padding: 10px;
-}
 
 .archive {
   margin: 0;
@@ -288,6 +286,7 @@ img {
   .highlight {
     font-size: 16px;
     margin: 40px -20px;
+    border-radius: 5%;
   }
 
   .archive {
