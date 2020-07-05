@@ -21,12 +21,11 @@ title: Intro
 
 ### 2020年5月至今
 
-顺利的学习了 `CPP` ，`LUA`，`JavaScript`，并惊叹于 `LUA` 这种栈式操作的神奇之处（高性能），使用golang编写了开源项目[SuperLcx](github.com/dashjay/superlcx)，然后也编写了一些 `IO` 性能较好的工具。
+顺利的学习了 `CPP` ，`LUA`，`JavaScript`，并惊叹于 `LUA` 这种栈式操作的神奇之处（高性能），使用golang编写了开源项目[SuperLcx](https://github.com/dashjay/superlcx)，然后也编写了一些 `IO` 性能较好的工具。
 
 ## 过去
 
 1998年出生后直到18年5月才接触代码，当时Kesa教我写代码，我沉迷其中，成绩一落千丈，但是还是没办法......成绩比较差，出国的打算也没了，但是我的一堆朋友们(Vincente,HW,XRM,DYF,KESA)等等都帮我很多，然后我成功去海洋大学交换了一个学期，整理了一下心态......开始新的一年了2020
-
 
 ## Dashjay's
 
