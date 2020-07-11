@@ -1,24 +1,24 @@
 ---
-title: 使用travis实现博客自动化部署
+title: 使用travis进行hugo自动化部署
 date: '2020-05-23'
-description: 使用travis对本博客进行自动化部署
+draft: 'true'
+description: 使用travis进行hugo自动化部署
 author: dashjay
 ---
 
-> 原来博客写了个脚本，把public文件夹完全删除，然后再次`git init`再-f push到github.io的repo，总之每次源文件要推送，public要单独推送。因为github page 不能运行hugo的部署，故写了此次博客记录一下。
+> 原来博客写了个脚本，把public文件夹完全删除，然后再次`git init`再-f push到github.io的repo，总之每次源文件要推送，public要单独推送。因为 github page 不能自动运行 hugo 的部署，故写了此次博客记录一下。
 
 1. 首先我在git上开了一个repo，然后把我的源博客给push上去，<https://github.com/dashjay/blog>
 
 2. 紧接着又开了一个githubpage的空repo，如果你已经有了，就没有这个步骤了。确认一下github page 的设置。
   
-
 ![github page 配置](/post/博客自动化部署/9833528A-7A75-4324-9039-79702CFD2928.png)
 
 设置没问题的话，githubpage的repo添加一个GITHUB_TOKEN，保证次TOKEN有repo的 `public_repoAccess public repositories`权限 [点此处去配置Token](https://github.com/settings/tokens)
 
 我最后没有使用Token来访问，转而使用用户名和密码了。
 
-3. 在项目的根目录下创建一个名字叫 .travis.yml的文件内容如下。
+3. 在项目的根目录下创建一个名字叫 .travis.yml 的文件内容如下。
 
 本身应该使用go来get hugo，但是我发现直接下载最新的发行版不容易出错，也更快，因此就这么办了。
 
