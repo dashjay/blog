@@ -8,4 +8,6 @@
 
 [第十二章 虚函数](./12-virtual-functions)
 
-[第十三章 模板](./12-virtual-functions)
+[第十三章 模板](./13-templates)
+
+[第十四章 异常](./14-exceptions)
