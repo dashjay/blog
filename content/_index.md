@@ -1,10 +1,9 @@
 ---
-title: INDEX
+title: Dashjay's
 ---
 
-# Dashjay's
 
-## 即将于2021年毕业于海淀村办科技大学
+## Next: 即将于2021年毕业于海淀村办科技大学
 
 热爱CS，头发健在，喜欢
 
