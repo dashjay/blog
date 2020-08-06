@@ -41,6 +41,8 @@ footnotereturnlinkcontents = "↩"
     url = "/superlcx.CN"
 
 [params]
+    highlightjsTheme = "prism"
+    highlightjsVersion = "10.1.2"
     custom_css = ["css/theme-override.css"]
 
 [markup]
