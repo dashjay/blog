@@ -1,5 +1,5 @@
 ---
-title: 'MySQL - MVCC'
+title: 'MySQL - MVCC 并发版本控制实现'
 date: '2020-11-27'
 description: ''
 author: 'dashjay'
@@ -32,7 +32,7 @@ author: 'dashjay'
 
 ## ReadView
 
-已提交读和可重复读的区别就在于它们生成ReadView的策略不同。
+读已提交和可重复读的区别就在于它们生成ReadView的策略不同。
 
 ReadView中主要就是有个列表来存储我们系统中当前活跃的读写事务（ begin未 commit 的 tx）。通过这个列表来判断记录的某个版本是否对当前事务可见。假设当前列表里的事务 id 为[80,100]。
 
