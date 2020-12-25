@@ -19,7 +19,7 @@ before_script:
   - git config --global user.name dashjay
 
 script:
-  - cd learn-cpp
+  - cd learncpp_cn
   - mkdocs build -c -d ../static/learncpp
   - cd ..
   - hugo -d ./dist/
