@@ -1,5 +1,5 @@
 ---
-title: 使用Modelsim中的CommandTools 进行仿真
+title: 使用 Modelsim 中的 CommandTools 进行仿真
 author: dashjay
 date: '2019-07-27'
 slug: modelsim-commandtools
@@ -12,11 +12,11 @@ subtitle: ''
 image: ''
 ---
 
-> 最后修改于 2020-12-31
+本文最后修改于 2020-12-31
 
-> 之前一直使用的是iverilog进行的仿真，生成vvp可执行文件之后运行得到结果
+> 本人在本科期间有学一门课程叫做数字逻辑，这是一门从与或门开始，一直到加法器等普通电子器件，最终实现一个 CPU 的课程。课程内使用的是一个叫 Vivado 的电路设计，仿真综合软件。我私下一直使用的是iverilog进行的仿真，生成vvp可执行文件之后运行得到结果，因为方便。
 
-方法如下直接给Makefile
+我一般会写这样的Makefile
 
 ```makefile
 all: cmp vvp lxt
@@ -33,13 +33,13 @@ clean:
  @rm -rf tb_top.vvp tb_top.lxt
 ```
 
-有了以上 **Makefile** ，将 ***.v**文件和 **Makefile** 放在一起，make即可完成相应操作
+有了以上 **Makefile** ，将 ***.v**文件和 **Makefile** 放在一起，执行 make 命令即可完成相应操作
 
 但是用这种方式，生成的波形只能使用GTKwave来查看，并且当有一些复杂的情况出现时候，iverilog就无法处理了，所以我们使用Intel提供的免费的Modelsim来完成仿真，仿真资料比较少，全是图形化界面的介绍，道路坎坷。
 
 ### 0x0：下载全套工具
 
-intel官网下载的lite版本，最小套装
+我在 intel 官网下载了 lite 版本，最小套装，大同小异，包大小 100 多 M，这里就不留源文件了。
 **Quartus-lite-18.1.0.625-linux.tar**
 
 ### 0x1：安装
