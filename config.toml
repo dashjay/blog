@@ -16,29 +16,24 @@ footnotereturnlinkcontents = "↩"
     weight = 1
 
 [[menu.main]]
-    name = "LearnCPP"
-    url = "/learncpp"
+    name = "LearnCPP中文翻译"
+    url = "https://learncppcn.github.io/"
     weight = 5
 
 [[menu.main]]
-    name = "Resume"
-    url = "/resume"
+    name = "CV"
+    url = "/cv"
     weight = 10
 
 [[menu.main]]
-    name = "日报"
+    name = "我在做什么？"
     url = "/daily"
     weight = 20
 
 [[menu.main]]
-    name = "Intro"
-    url = "/intro"
-    weight = 30
-
-[[menu.main]]
-    name = "SuperLcx"    
+    name = "Contribution"    
     weight = 60
-    url = "/superlcx.CN"
+    url = "/open_source"
 
 [params]
     highlightjsTheme = "prism"
@@ -66,3 +61,20 @@ footnotereturnlinkcontents = "↩"
 
 [frontmatter]
 lastmod = ["lastmod", ":fileModTime", ":default"]
+
+
+[Params]
+  enableGitalk = true
+
+[Params.Gitalk]
+    clientID = "790319b9ce1b0f784836"
+    clientSecret = "6ff794c7a563b9dcab2ae7d1291c2569beade0ce" 
+    repo = "blog" 
+    owner = "dashjay" 
+    admin= "dashjay" 
+    id= "location.pathname" 
+    labels= "gitalk" 
+    perPage= 15 
+    pagerDirection= "last" 
+    createIssueManually= false 
+    distractionFreeMode= false 

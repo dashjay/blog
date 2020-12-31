@@ -12,10 +12,13 @@ subtitle: ''
 image: ''
 ---
 
+> 最后修改于 2020-12-31
+
 > 之前一直使用的是iverilog进行的仿真，生成vvp可执行文件之后运行得到结果
+
 方法如下直接给Makefile
 
-```verilog
+```makefile
 all: cmp vvp lxt
 
 cmp:
