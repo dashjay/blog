@@ -9,8 +9,9 @@ categories:
 tags: []
 ---
 
+更新于 2020-12-31
 
-丑话说前面，本人就是LJ本科生，水平没多高，大多数代码源自其他项目，比如一个叫leaf的游戏框架。
+鄙人就是普通本科生，编码水平谦虚，大多数代码源自其他项目，比如一个叫leaf的游戏框架。
 
 [leafgithub.com](https://link.zhihu.com/?target=https%3A//github.com/name5566/leaf)
 
@@ -49,71 +50,38 @@ tags: []
 ```go
 // 整个项目的交流系统，由clients和各种不同的chan组成，
 type Hub struct {
-	Clients      map[*Client]bool   // 储存保持连接的用户
-	UserToClient map[string]*Client // 获得用户和其连接的对应关系
-	Message      chan []byte        // 广播消息队列
-	Register     chan *Client       // 发起注册请求的队列
-	Unregister   chan *Client       // 断开连接的队列
+ Clients      map[*Client]bool   // 储存保持连接的用户
+ UserToClient map[string]*Client // 获得用户和其连接的对应关系
+ Message      chan []byte        // 广播消息队列
+ Register     chan *Client       // 发起注册请求的队列
+ Unregister   chan *Client       // 断开连接的队列
 }
 ```
 
 注释讲的比较清楚了，我中间使用UserToClient这个map来方便找到我们的Client而已，
 
-> 注意，Client我们存的是指针，因此在这里并没有冗余，我只是为了方便找用户，而且不用再遍历。
+> 注意，Client我们存的是指针，因此在这里并没有太多冗余，我只是为了方便找用户，而且不用再遍历。
 
 这里大家有没有注意到一个好玩的东西叫做`chan` ，这个东西在C/C++里叫做pipe，但是我个人觉得在go里爽的不止那么一点点，有这个东西，我的思路清晰多了。
 
-> 我在这里插入一个操作系统中生产者消费者的例子，如果觉得没啥好玩的可以跳过。
+Golang 给我们提供了一个类似于管道的东西，目的是进行协程间通信。我们先假装自己不知道goroutine这个东西，我们就可以认为 go produce(ch) 就相当于手动执行了一个程序，传入了我们事先 make 的一个长度（缓冲长度）为 5 的chan `ch := make(chan int, 5)` 这个管道有点像。
 
-```go
-package main
-
-import (
-	"fmt"
-	"time"
-)
-
-func produce(p chan<- int) {
-	for i := 0; i < 1000; i++ {
-		p <- i
-		fmt.Println("send:", i)
-	}
-}
-func consumer(c <-chan int) {
-	for i := 0; i < 1000; i++ {
-		v := <-c
-		fmt.Println("receive:", v)
-	}
-}
-func main() {
-	ch := make(chan int, 5)
-	go produce(ch)
-	go consumer(ch)
-	time.Sleep(10000 * time.Second)
-}
-```
-
-就这么个东西，golang 给我们提供了一个类似于管道的东西，目的是进行进程间通信。我们先假装自己不知道goroutine这个东西，我们就可以认为 go produce(ch) 就相当于手动执行了一个程序，传入了我们事先 make 的一个长度（缓冲长度）为 5 的chan `ch :=make(chanint,5)` 这个管道有点像。
-
-你还没放学，你妈妈给你做了5个烧饼，你回来就吃了一个 ，然后妈妈问你还要不要，你说要，然后管道里又多了一个生产者生产的烧饼，就是这样一个过程，说白了有点像个队列，具体我就没有看了。
-
-============操作系统课结束=============
 
 那么我们在本次项目当中也会使用这种 `chan` ，功能就是这样：
 
-> 再补充一个关键词 阻塞（block） 就是当程序执行到 v <- chan 然后这个 chan 里没东西的时候，程序就会阻塞。那么好我们来看一下怎么用上面的那个Hub的结构。
+> 再补充一个关键词 阻塞（block） 就是当程序执行到 v := <- chan 然后这个 chan 里没东西的时候，程序就会阻塞。那么好我们来看一下怎么用上面的那个Hub的结构。
 
 忘了说，这个Hub是单例，也就是说整个代码里只运行一份。因此一个Hub要写完整个项目的逻辑，那么我就从hub的创建开始
 
 ```go
 func NewHub() *Hub {
-	return &Hub{
-		Message:      make(chan []byte),        // 消息队列
-		Register:     make(chan *Client),       // 等待创建连接的用户
-		Unregister:   make(chan *Client),       // 等待退出断开连接的用户
-		Clients:      make(map[*Client]bool),   // 客户数组
-		UserToClient: make(map[string]*Client), //建立用户名和客户端唯的唯一通道
-	}
+ return &Hub{
+  Message:      make(chan []byte),        // 消息队列
+  Register:     make(chan *Client),       // 等待创建连接的用户
+  Unregister:   make(chan *Client),       // 等待退出断开连接的用户
+  Clients:      make(map[*Client]bool),   // 客户数组
+  UserToClient: make(map[string]*Client), //建立用户名和客户端唯的唯一通道
+ }
 }
 ```
 
@@ -121,9 +89,9 @@ main函数中运行hub并且run起来
 
 ```go
 // 创建端系统的hub
-	hub := starlight.NewHub()
-	// 运行hub
-	go hub.Run()
+ hub := starlight.NewHub()
+ // 运行hub
+ go hub.Run()
 ```
 
 我的天，我给项目起了个名字，叫星光，太羞耻了。
@@ -148,108 +116,104 @@ default:
 ```go
 // Run 跑起来，完成和用户保持连接，注册，注销用户等功能，控制消息队列
 func (h *Hub) Run() {
-	for {
-		select {
+ for {
+  select {
 
-		case client := <-h.Register: // 用户创建新的连接
-			{
-				h.Clients[client] = true
-			}
+  case client := <-h.Register: // 用户创建新的连接
+   {
+    h.Clients[client] = true
+   }
 
-		case client := <-h.Unregister: // 用户断开连接
-			{
-				if _, ok := h.Clients[client]; ok {
-					delete(h.Clients, client)
-					close(client.Send)
-				}
-				delete(h.UserToClient, client.Info.UserID)
-			}
-		// 这个是全局消息 每个人都会收到
-		case message := <-h.Message:
-			{
-				for client := range h.Clients {
-					select {
-					case client.Send <- message:
-					default:
-						close(client.Send)
-						delete(h.Clients, client)
-					}
-				}
-			}
-		}
-	}
+  case client := <-h.Unregister: // 用户断开连接
+   {
+    if _, ok := h.Clients[client]; ok {
+     delete(h.Clients, client)
+     close(client.Send)
+    }
+    delete(h.UserToClient, client.Info.UserID)
+   }
+  // 这个是全局消息 每个人都会收到
+  case message := <-h.Message:
+   {
+    for client := range h.Clients {
+     select {
+     case client.Send <- message:
+     default:
+      close(client.Send)
+      delete(h.Clients, client)
+     }
+    }
+   }
+  }
+ }
 }
 ```
 
-第一个 `case client := <- h.Register `也就是从注册队列中取一个出来执行注册逻辑，下面是注销逻辑，记得用了哪些东西必须删除，然后下面那个Message是大喇叭，所有客户端都会收到消息，写好这个东西，你的加特林就已经转起来了，虽然还没有一发子弹。
+第一个 `case client := <- h.Register`也就是从注册队列中取一个出来执行注册逻辑，下面是注销逻辑，记得用了哪些东西必须删除，然后下面那个Message是大喇叭，所有客户端都会收到消息，写好这个东西，你的加特林就已经转起来了，虽然还没有一发子弹。
 
 那我们来看一下简单逻辑。
 
 ```go
 // 监听消息
-	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		wshandler.ServeWs(hub, w, r)
-	})
+ http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+  wshandler.ServeWs(hub, w, r)
+ })
 ```
 
-这里我使用的是官方http库，如果要使用beego或者iris等框架，应该有对应的 FromStd 的handler，我记得 iris 的handler是一个只有 `iris.Context`的函数，但是应该有` iris.FronStd `这样的函数，总之就是一个 Handler 嘛 。然后我们来看一下ServeWs怎么写的。
+这里我使用的是官方http库，如果要使用beego或者iris等框架，应该有对应的 handler。
 
 ```go
 // serveWs handles websocket requests from the peer.
 func ServeWs(hub *starlight.Hub, w http.ResponseWriter, r *http.Request) {
-	//完成之后将http请求升级成socket连接
-	conn, err := upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	// 初始化该用户
-	c := &starlight.Client{Hub: hub, Conn: conn, Send: make(chan []byte, 256)}
-	// 连接注册
-	hub.Register <- c
+ //完成之后将http请求升级成socket连接
+ conn, err := upgrader.Upgrade(w, r, nil)
+ if err != nil {
+  log.Println(err)
+  return
+ }
+ // 初始化该用户
+ c := &starlight.Client{Hub: hub, Conn: conn, Send: make(chan []byte, 256)}
+ // 连接注册
+ hub.Register <- c
 
-	go c.ReadPump()
-	go c.WritePump()
+ go c.ReadPump()
+ go c.WritePump()
 }
 ```
 
-我用升级这个词可能不专业，但是官方库的函数名称就叫做 `Upgrade`，然后中间用到了一个upgrader这个是官方写法，应该算是一个中间件，写法如下。
+我用升级这个词可能不太合适，但是官方库的函数名称就叫做 `Upgrade`，然后中间用到了一个 upgrader 这个是官方写法，应该算是一个中间件，写法如下，大概意思就是 HTTP 遇到 101 code，然后 Golang hijike 将 HTTP 内的 TCP 链接取出来，协议升级到 WebSocket。
 
 ```go
 var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-	CheckOrigin:     func(r *http.Request) bool { return true },
+ ReadBufferSize:  1024,
+ WriteBufferSize: 1024,
+ CheckOrigin:     func(r *http.Request) bool { return true },
 }
 ```
 
-现在幻想一下，http服务也跑起来了，hub也跑起来了，每一个用户只要请求，服务器的/ws，他发起的Socket连接就会被 upgrade 成一个WebSocket连接，并且被Client持有，他的指针会被推入注册的的队列中，你再会看一下之前的注册逻辑，其实就是把Client这个map的对应项设置为true。到现在为止客户端已经可以和用户保持连接了。但是还不能收发数据。根据更前方的框架图主要在`go c.ReadPump() go c.WritePump()`这两个函数上，他们在处理，和用户交互的逻辑。 我们一样的进来看看这两个函数怎么写的。
+现在幻想一下，http服务也跑起来了，hub也跑起来了，每一个用户只要请求，服务器的/ws，他发起的Socket连接就会被 upgrade 成一个WebSocket连接，并且被Client持有，他的指针会被推入注册的的队列中，你再会看一下之前的注册逻辑，其实就是把 Client 这个 map 的对应项设置为 true。到现在为止客户端已经可以和用户保持连接了。但是还不能收发数据。根据更前方的框架图主要在`go c.ReadPump()` 和 `go c.WritePump()` 这两个函数上，他们在处理，和用户交互的逻辑。 我们一样的进来看看这两个函数怎么写的。
 
 ```go
 func (c *Client) ReadPump() {
-	// 函数返回后执行内容
-	defer func() {
-		c.Hub.Unregister <- c
-		_ = c.Conn.Close()
-	}()
 
-	// 设置读限制
-	c.Conn.SetReadLimit(maxMessageSize)
-	//read超时时间
-	_ = c.Conn.SetReadDeadline(time.Now().Add(pongWait))
-	// 超时操作
-	c.Conn.SetPongHandler(func(string) error {
-		_ = c.Conn.SetReadDeadline(time.Now().Add(pongWait))
-		return nil
-	})
+ defer func() {
+  c.Hub.Unregister <- c
+  _ = c.Conn.Close()
+ }()
 
-	// 第一个消息就是处理注册
-	if err := c.OnLogin(); err != nil {
-		log.Println(err.Error())
-		return
-	}
-        for { ........
-.............
+ c.Conn.SetReadLimit(maxMessageSize)
+ _ = c.Conn.SetReadDeadline(time.Now().Add(pongWait))
+ c.Conn.SetPongHandler(func(string) error {
+  _ = c.Conn.SetReadDeadline(time.Now().Add(pongWait))
+  return nil
+ })
+
+ // 第一个消息就是处理注册
+ if err := c.OnLogin(); err != nil {
+  log.Println(err.Error())
+  return
+ }
+ for { ........
 ```
 
 无非就是一些配置，然后再循环外面执行OnConnect的操作，我们来看看 Login 咋写的我都快忘了
@@ -257,13 +221,13 @@ func (c *Client) ReadPump() {
 ```go
 func (c *Client) OnLogin() error {
 
-	// 接收用户的消息头
-	_, message, err := c.Conn.ReadMessage()
-	if err != nil {
-		return err
-	}
+ // 接收用户的消息头
+ _, message, err := c.Conn.ReadMessage()
+ if err != nil {
+  return err
+ }
         // 回复注册
-	c.Send <- message
+ c.Send <- message
 }
 ```
 
@@ -273,9 +237,9 @@ func (c *Client) OnLogin() error {
 
 ```go
 defer func() {
-		c.Hub.Unregister <- c
-		_ = c.Conn.Close()
-	}()
+  c.Hub.Unregister <- c
+  _ = c.Conn.Close()
+ }()
 ```
 
 这个东西作用就是一旦用户出现任何异常，立马`return`立马关闭他的连接，防止出现任何异常，你可以写上其他操作，不过一般 注销逻辑都放在hub下面的for select那写了。
@@ -285,28 +249,28 @@ ReadPump后面for循环内的逻辑就比较简单了，
 ```go
 for {
 
-		// 读取消息
-		_, message, err := c.Conn.ReadMessage()
+  // 读取消息
+  _, message, err := c.Conn.ReadMessage()
 
-		if err != nil {
-			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-				log.Printf("error: %v", err)
-			}
-			break
-		}
-		mess := Message{}
+  if err != nil {
+   if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
+    log.Printf("error: %v", err)
+   }
+   break
+  }
+  mess := Message{}
 
-		err = json.Unmarshal(message, &mess)
-		if err != nil {
-			fmt.Println(err)
-			continue
-		}
+  err = json.Unmarshal(message, &mess)
+  if err != nil {
+   fmt.Println(err)
+   continue
+  }
 ........
 ```
 
-我还是不全部粘贴了，我的垃圾代码实在是太长了，主要我的业务逻辑比较扯淡，复杂。
+我还是不全部粘贴了，我的垃圾代码实在是太长了，主要我的业务逻辑比较复杂。
 
-你会发现这样一个问题，你从c是可以取到这个client的标识的，并且可与取到hub，那么爽的来了，当某c说要发消息给另一个c`的时候，我们就直接粗暴解决问题
+你会发现这样一个问题，你从c是可以取到这个 client 的标识的，并且可与取到 hub，那么爽的来了，当某 c 说要发消息给另一个 c 的时候，我们就直接粗暴解决问题
 
 ```go
 c.Hub.UserToClient[mess.ToUserID].Send <- res
@@ -318,52 +282,49 @@ c.Hub.UserToClient[mess.ToUserID].Send <- res
 
 ```go
 func (c *Client) WritePump() {
-	ticker := time.NewTicker(pingPeriod)
-	defer func() {
-		ticker.Stop()
-		_ = c.Conn.Close()
-	}()
+ ticker := time.NewTicker(pingPeriod)
+ defer func() {
+  ticker.Stop()
+  _ = c.Conn.Close()
+ }()
 
-	// 发送消息的队列
-	for {
-		select {
-		case message, ok := <-c.Send:
-			_ = c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
-			if !ok {
-				// The hub closed the channel.
-				_ = c.Conn.WriteMessage(websocket.CloseMessage, []byte{})
-				return
-			}
-			// TODO:这里是一个发送内容需要指定的Writer
-			w, err := c.Conn.NextWriter(websocket.TextMessage)
-			if err != nil {
-				return
-			}
-			// 发送取出的第一条消息
-			_, _ = w.Write(message)
+ // 发送消息的队列
+ for {
+  select {
+  case message, ok := <-c.Send:
+   _ = c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
+   if !ok {
+    // The hub closed the channel.
+    _ = c.Conn.WriteMessage(websocket.CloseMessage, []byte{})
+    return
+   }
+   // TODO:这里是一个发送内容需要指定的Writer
+   w, err := c.Conn.NextWriter(websocket.TextMessage)
+   if err != nil {
+    return
+   }
+   
+   _, _ = w.Write(message)
 
-			// 将队列中的消息全都发送出来
-			n := len(c.Send)
-			for i := 0; i < n; i++ {
+   n := len(c.Send)
+   for i := 0; i < n; i++ {
 
-				_, _ = w.Write(<-c.Send)
-			}
+    _, _ = w.Write(<-c.Send)
+   }
 
-			// 差错
-			if err := w.Close(); err != nil {
-				return
-			}
-		case <-ticker.C:
-			_ = c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
-			if err := c.Conn.WriteMessage(websocket.PingMessage, nil); err != nil {
-				return
-			}
-		}
-	}
+   // 差错
+   if err := w.Close(); err != nil {
+    return
+   }
+  case <-ticker.C:
+   _ = c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
+   if err := c.Conn.WriteMessage(websocket.PingMessage, nil); err != nil {
+    return
+   }
+  }
+ }
 }
 ```
-
-我都写了注释了，这个里面这个ticker我也没看是什么东西，但是从别人那儿把代码Copy过来的。到此为止这个项目就结束了。
 
 再整理一遍，
 
@@ -374,8 +335,6 @@ func (c *Client) WritePump() {
 3、运行`Readpump()`，`WritePump()`来从客户端读取消息，并且写入消息。
 
 4、每个队列各司其职，完美解决消息传输业务。
-
-有人想看我代码么？有人看在留个言，我再整理整理，主要我的代码里面框架都被业务逻辑淹没了，比较垃圾。
 
 就酱，最近人在山东，太冷了，冷影响写代码了。
 
