@@ -1,17 +1,12 @@
 ---
-title: Post4_Radare 使用记录
+title: Radare 的使用
 author: dashjay
 date: '2019-12-11'
-slug: post4-radare
+slug: 'use-of-radare'
 categories: []
 tags: []
 ---
 
-[toc]
-
-
-
-##  报告4 
 
 选择产品：Radare2取证工具
 
@@ -43,7 +38,7 @@ AAAA%
 
 看下man手册介绍
 
-```
+```bash
 
 RAX2(1)                   BSD General Commands Manual                  RAX2(1)
 
@@ -89,8 +84,6 @@ $rahash2 -s I_LOVE_OUC -j
 
 ### Radare2
 
-
-
 为了展示这个程序的厉害我从网上看到了一个小实验，上一段代码
 
 ```c
@@ -115,9 +108,9 @@ int main(){
 
 按照常理来将，`/bin/sh`是不会被执行的，但是，并且编译出结果的我们本身是无法知道源代码的，这时候可以使用r2来汇编码
 
-`> sudo gcc -o a buffer.c -no-pie -m32 -fno-stack-protector `
+`> sudo gcc -o a buffer.c -no-pie -m32 -fno-stack-protector`
 
->  首先我先使用管理员权限编译这个代码，这里使用sudo只是为了将生成的目标文件的owner设置为root,当你以普通身份提权后可是获得root权限
+> 首先我先使用管理员权限编译这个代码，这里使用sudo只是为了将生成的目标文件的owner设置为root,当你以普通身份提权后可是获得root权限
 
 ```c
 root@Aurora:/home/code/pwn/challenge/1 # sudo gcc -o a buffer.c -no-pie -m32 -fno-stack-protector 
@@ -132,8 +125,6 @@ buffer.c:(.text+0x97): 警告：the `gets' function is dangerous and should not 
 
 可见gets本身是一个十分危险的函数,他不会检查字符串的长度,而是以回车来判断输入是否结束,及其容易引发栈溢出.
 
-
-
 &emsp;&emsp;解释一下这几个参数的作用:
 
 - `-m32`:指的是生成32位程序
@@ -142,7 +133,7 @@ buffer.c:(.text+0x97): 警告：the `gets' function is dangerous and should not 
 
 &emsp;&emsp;你可以使用如下命令来运行它，并且按下5个a回车可以对程序进行全局分析，
 
-```sh
+```bash
 > r2 ./a
 [0x100000f60]>aaaaa
 [x] Analyze all flags starting with sym. and entry0 (aa)
@@ -154,7 +145,7 @@ buffer.c:(.text+0x97): 警告：the `gets' function is dangerous and should not 
 
 使用> s main可以跳转到main函数，没有变化因为，r2给程序找了默认入口[0x100000f60]
 
-```
+```bash
 [0x100000f60]>s main
 [0x100000f60]>pdf
 ```
@@ -175,7 +166,7 @@ root@Aurora:/home/code/pwn/challenge/1 # checksec a
 
 下面我们来分析一下这个main()函数:
 
-```assembly
+```bash
 ┌ (fcn) entry0 28
 │   entry0 ();
 │           ; var int32_t var_4h @ rbp-0x4
@@ -195,7 +186,7 @@ root@Aurora:/home/code/pwn/challenge/1 # checksec a
 
 我们可以继续去看看vuln
 
-```assembly
+```bash
    sym._vuln ();
 │           ; var char *var_28h @ rbp-0x28
 │           ; var char *s @ rbp-0x20
@@ -213,15 +204,15 @@ root@Aurora:/home/code/pwn/challenge/1 # checksec a
 
 最关键的两行就是，这两行表示，把`*s`这个2*16字节的长度的字符串传入 rdi并且准备调用gets给他赋值
 
-```assembly
+```bash
 0x100000f48      488d7de0       lea rdi, [s]               ; char *s
 0x100000f4c      e82b000000     call sym.imp.gets          ; char *gets(char *s)
 ```
 
 栈结构画一下，就是这样的。
 
-```assembly
-       																		 +-----------------+
+```bash
+                          +-----------------+
                                            |     retaddr     |
                                            +-----------------+
                                            |     saved ebp   |
@@ -237,7 +228,7 @@ root@Aurora:/home/code/pwn/challenge/1 # checksec a
 
 看一下pwn的地址
 
-```assembly
+```bash
             ;-- section.0.__TEXT.__text:
             ;-- func.100000f20:
 ┌ (fcn) sym._pwn 29
@@ -251,7 +242,7 @@ root@Aurora:/home/code/pwn/challenge/1 # checksec a
 
 假如我们输入的字符串为:`0x28 * 'a' 'bbbb' + pwn_addr`,那么由于gets只有读到回车才停,所以这一段字符串会把saved_ebp覆盖为bbbb,将ret_addr覆盖为pwn_addr,那么,此时栈的结构为:
 
-```
+```bash
                                            +-----------------+
                                            |   0x100000f20   |
                                            +-----------------+
@@ -275,7 +266,7 @@ root@Aurora:/home/code/pwn/challenge/1 # checksec a
 到这里radare2的任务已经完成了，但是我还是使用python脚本完成这个题目。
 
 ```python
-#!	/usr/bin/python2
+#! /usr/bin/python2
 #选择python2解释器
 
 # -*- coding: UTF-8 -*-

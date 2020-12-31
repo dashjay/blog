@@ -14,41 +14,42 @@ tags: []
 golang 中的 build-in 的 map 这个 map 是非线程安全的，但是也是最常用的一个家伙。
 为了测试多个 map 的性能我写了个接口 Map
 
-```go
+``` go
 type Map interface {
- Set(key interface{}, val interface{})
- Get(key interface{}) (interface{}, bool)
- Del(key interface{})
+ Set(key string, val interface{})
+ Get(key string) (interface{}, bool)
+ Del(key string)
 }
+
 ```
 
 然后这是封装的普通的 map
 
-```go
+``` go
 type OriginMap struct {
- m map[interface{}]interface{}
+ m map[string]interface{}
 }
 
 func NewOriginMap() *OriginMap {
- return &OriginMap{m: make(map[interface{}]interface{})}
+ return &OriginMap{m: make(map[string]interface{})}
 }
 
-func (o *OriginMap) Get(key interface{}) (interface{}, bool) {
+func (o *OriginMap) Get(key string) (interface{}, bool) {
  v, ok := o.m[key]
  return v, ok
 }
-func (o *OriginMap) Set(key interface{}, value interface{}) {
+func (o *OriginMap) Set(key string, value interface{}) {
  o.m[key] = value
 }
 
-func (o *OriginMap) Del(key interface{}) {
+func (o *OriginMap) Del(key string) {
  delete(o.m, key)
 }
 ```
 
 别看一堆代码，其实就是 get 和 set 操作。在这里我们要使用 golang 自带的 test 工具
 
-```go
+``` go
 func TestOriginMaps(t *testing.T) {
  hm := NewOriginMap()
  wg := sync.WaitGroup{}
@@ -69,7 +70,7 @@ func TestOriginMaps(t *testing.T) {
 
 这其中有个变量 Writer 就是写者的数量，如果只有 1 的时候程序能安全运行退出
 
-```go
+``` go
 1264 ± : go test map_test/map_performance_test.go -v           ⏎ [3h1m] ✹ ✚ ✭
 === RUN   TestOriginMaps
 --- PASS: TestOriginMaps (0.00s)
@@ -83,7 +84,7 @@ ok      command-line-arguments  0.339s
 
 但是一旦我们把 Writer 数量改为 2
 
-```go
+``` go
 1264 ± : go test map_test/map_performance_test.go -v             [3h2m] ✹ ✚ ✭
 === RUN   TestOriginMaps
 fatal error: concurrent map writes
@@ -95,11 +96,11 @@ goroutine 21 [running]:
 
 当然有数 golang 开发者其中之一可是拿图灵奖的。你可以点击[stackoverflow 上的讨论](https://stackoverflow.com/questions/11063473/map-with-concurrent-access "stackoverflow这里")和[github 这里](https://github.com/golang/go/issues/21035 "github 上的讨论")去查看相关的 issue
 
-### Sync.Map
+### Sync. Map
 
 这是某大佬提出的解决方案，我们试试
 
-```go
+``` go
 type SyncMap struct {
  m sync.Map
 }
@@ -108,15 +109,15 @@ func NewSyncMap() *SyncMap {
  return &SyncMap{}
 }
 
-func (o *SyncMap) Get(key interface{}) (interface{}, bool) {
+func (o *SyncMap) Get(key string) (interface{}, bool) {
  v, ok := o.m.Load(key)
  return v, ok
 }
-func (o *SyncMap) Set(key interface{}, value interface{}) {
+func (o *SyncMap) Set(key string, value interface{}) {
  o.m.Store(key, value)
 }
 
-func (o *SyncMap) Del(key interface{}) {
+func (o *SyncMap) Del(key string) {
  o.m.Delete(key)
 }
 ```
@@ -127,58 +128,44 @@ func (o *SyncMap) Del(key interface{}) {
 
 我们现在小改一下第一种 map 加了个 RW 锁，然后和这种 map 做一下比较看看？
 
-```go
+``` go
 type OriginWithRWLock struct {
- m map[interface{}]interface{}
+ m map[string]interface{}
  l sync.RWMutex
 }
 
 func NewOriginWithRWLock() *OriginWithRWLock {
  return &OriginWithRWLock{
-  m: make(map[interface{}]interface{}),
+  m: make(map[string]interface{}),
   l: sync.RWMutex{},
  }
 }
 
-func (o *OriginWithRWLock) Get(key interface{}) (interface{}, bool) {
+func (o *OriginWithRWLock) Get(key string) (interface{}, bool) {
  o.l.RLock()
  v, ok := o.m[key]
  o.l.RUnlock()
  return v, ok
 }
-func (o *OriginWithRWLock) Set(key interface{}, value interface{}) {
+func (o *OriginWithRWLock) Set(key string, value interface{}) {
  o.l.Lock()
  o.m[key] = value
  o.l.Unlock()
 }
 
-func (o *OriginWithRWLock) Del(key interface{}) {
+func (o *OriginWithRWLock) Del(key string) {
  o.l.Lock()
  delete(o.m, key)
  o.l.Unlock()
 }
 ```
 
-然后我们这次用 Test 里的 Benchmark 试试看
+然后我们这次用 Test 里的 Benchmark 试试看，为了方便比较，我们写一个函数 benchmarkMap。
 
-```go
-func BenchmarkMaps(b *testing.B) {
-
- b.Logf("Writer: %d,Reader: %d", Writer, Readers)
- b.Run("map with SyncLock", func(b *testing.B) {
-  hm := NewSyncMap()
-  benchmarkMap(b, hm)
- })
-
- b.Run("map with RWLock", func(b *testing.B) {
-  hm := NewOriginWithRWLock()
-  benchmarkMap(b, hm)
- })
-}
-
+``` go
 func benchmarkMap(b *testing.B, hm Map) {
+ var wg sync.WaitGroup
  for i := 0; i < b.N; i++ {
-  var wg sync.WaitGroup
   for j := 0; j < Writer; j++ {
    wg.Add(1)
    go func() {
@@ -190,7 +177,7 @@ func benchmarkMap(b *testing.B, hm Map) {
     wg.Done()
    }()
   }
-  for j := 0; j < Readers; j++ {
+  for j := 0; j < Reader; j++ {
    wg.Add(1)
    go func() {
     for k := 0; k < 100; k++ {
@@ -200,57 +187,65 @@ func benchmarkMap(b *testing.B, hm Map) {
    }()
   }
  }
+ wg.Wait()
 }
+
+func BenchmarkMaps(b *testing.B) {
+ b.Logf("Writer: %d,Reader: %d", Writer, Reader)
+
+ b.Run("SyncMap", func(b *testing.B) {
+  hm := NewSyncMap()
+  benchmarkMap(b, hm)
+ })
+
+ b.Run("map with RWLock", func(b *testing.B) {
+  hm := NewOriginWithRWLock()
+  benchmarkMap(b, hm)
+ })
+}
+
 ```
 
 首先是 BenchMark 的函数当使用
 
-```go
-go test .... -bench=.
+``` go
+go test .... -bench=. -benchmem
 ```
 
 的时候会被调用，然后来测试两种 Map 性能，上面那个是测试性能的函数，分别对两个函数的进行测试~~拭目以待
 
 > 当两者都是 100 的时候
 
-```go
+``` go
 
-1266 ± : go test map_test/map_performance_test.go -bench=. -v                                                                                       [3h29m] ✹ ✚ ✭
+ go test test_map/map_test.go  -v -bench=. -benchmem                                                                                                                         [14:12:59]
 goos: darwin
 goarch: amd64
-BenchmarkMaps/map_with_SyncLock-8                   1459            749699 ns/op
-BenchmarkMaps/map_with_RWLock-8                     1688           1405360 ns/op
---- BENCH: BenchmarkMaps
-    map_performance_test.go:92: Writer: 100,Reader: 100
+BenchmarkMaps
+    map_test.go:73: Writer: 100,Reader: 100
+BenchmarkMaps/SyncMap
+BenchmarkMaps/SyncMap-8                       80          13374265 ns/op         1710981 B/op      80867 allocs/op
+BenchmarkMaps/map_with_RWLock
+BenchmarkMaps/map_with_RWLock-8              100          12572631 ns/op          155019 B/op      16951 allocs/op
 PASS
-ok      command-line-arguments  4.674s
+ok      command-line-arguments  3.323s
 
 ```
 
-然后我测试了，各种情况下的比较画了个表格 单位是 ns/op ,每次操作需要的秒数
-
-| R/W | map_with_SyncLock | map_with_RWLock |
-| --- | --- | --- |
-| 100/100 | 749699|1405360 |
-|10/100 | 2053942| 333406|
-| 100/10| 432235|1076423 |
-|100/200 |1474482 | 1920310|
-|200/100 |1135713 |2372780 |
-
-那么从这个表里可以看出，SyncMap 的整体性能是优于 mapWithRWLock 的我来分析一下为什么
+基本上 SyncMap 的整体性能是优于 mapWithRWLock 的我来分析一下为什么
 
 从古至今，人们一直在时间和空间上做斗争，这次也不例外，两种锁的实现原理不一样。
 
 <div align="center">
- <img src=https://imgkr.cn-bj.ufileos.com/8ce8ae6e-8cee-421c-8d54-0057d287e448.png>
- <p> 图1：带锁的map</p>
+ <img src=/post/2020-01-12-golang-map_files/map-with-lock.jpg>
+ <p> 图1：带锁的 map</p>
 </div>
 
 当我们使用普通 Map 带 RWMutex 会将整块内存锁住，然后其他请求就要等待。
 SyncMap 是如何实现的呢？
 
 <div align="center">
- <img src=https://imgkr.cn-bj.ufileos.com/9fd62de8-9760-47d5-a525-eb043b409a0c.png>
+ <img src=/post/2020-01-12-golang-map_files/syncmap.jpg>
  <p> 图2：SyncMap</p>
 </div>
 
@@ -265,7 +260,7 @@ SyncMap 是如何实现的呢？
 > 手痒想写个内存的看看到底多花多少内存
 > go tool pprof 是一个工具可以查看代码测评产生的内存日志
 
-```go
+``` go
 
 go test map_test/map_performance_test.go -bench=. -memprofile=mem.prof
 go tool pprof map.test mem.prof
@@ -284,8 +279,7 @@ go tool pprof map.test mem.prof
 
 立马封装一波
 
-```go
-
+``` go
 type ConCurrentMap struct {
  m cmap.ConcurrentMap
 }
@@ -295,53 +289,52 @@ func NewConCurrentMap() *ConCurrentMap {
  return &ConCurrentMap{m: conMap}
 }
 
-type OriginMap struct {
- m map[interface{}]interface{}
-}
-
-func (c *ConCurrentMap) Get(key interface{}) (interface{}, bool) {
- v, ok := c.m.Get(key.(string))
+func (c *ConCurrentMap) Get(key string) (interface{}, bool) {
+ v, ok := c.m.Get(key)
  return v, ok
 }
-func (c*ConCurrentMap) Set(key interface{}, value interface{}) {
- c.m.Set(key.(string), value)
+func (c *ConCurrentMap) Set(key string, value interface{}) {
+ c.m.Set(key, value)
 }
 
-func (c *ConCurrentMap) Del(key interface{}) {
- c.m.Remove(key.(string))
+func (c *ConCurrentMap) Del(key string) {
+ c.m.Remove(key)
 }
-
 ```
 
 迫不及待开始测试，当 Write=100，Reader=100 的时候
 
-```
-
-1271 ± : go test map_test/map_performance_test.go -bench=. -v                                                                                       [4h11m] ✹ ✚ ✭
+```bash
+go test test_map/map_test.go  -v -bench=. -benchmem                                                                                                                         [14:24:48]
 goos: darwin
 goarch: amd64
-BenchmarkMaps/map_with_SyncLock-8                   1374            760728 ns/op
-BenchmarkMaps/map_with_RWLock-8                     1671           1556679 ns/op
-BenchmarkMaps/concurrentMap-8                       2667           1060736 ns/op
---- BENCH: BenchmarkMaps
-    map_performance_test.go:114: Writer: 100,Reader: 100
+BenchmarkMaps
+    map_test.go:73: Writer: 1000,Reader: 1000
+BenchmarkMaps/SyncMap
+BenchmarkMaps/SyncMap-8                        8         129847762 ns/op        16410356 B/op     785167 allocs/op
+BenchmarkMaps/map_with_RWLock
+BenchmarkMaps/map_with_RWLock-8               10         117275854 ns/op         1723905 B/op     169971 allocs/op
+BenchmarkMaps/CMap
+BenchmarkMaps/CMap-8                          69          27681675 ns/op         1786702 B/op     169936 allocs/op
+PASS
+ok      command-line-arguments  4.424s
 
 ```
 
 那么我同样做个表格吧，把读写的几种情况都列出来
 
-| R/W | map_with_SyncLock | map_with_RWLock | concurrentMap |
+| R/W | SyncMap | map_with_RWLock | CMap |
 | --- | --- | --- | --- |
-| 100/100 |760728 |1556679 | 1060736|
-|10/100 |1690986 |338078 |457065 |
-| 100/10|443063 | 1026160|544635 |
+| 100/100 |`13657466` |`12122735` | `1946771`|
+|10/100 |`4040595` |`11031799` |`1770506` |
+| 100/10|`1696194` | `1916231`|`360180` |
 
 最后说一下这个并发读map是怎么搞的
 
 <div align="center">
- <img src=https://imgkr.cn-bj.ufileos.com/84240d5a-21a9-4df7-8cf6-97fd06dc2b11.png>
- <p> 图片2：并发map和传统带锁的map的区别</p>
-<div>
+ <img src=/post/2020-01-12-golang-map_files/cmap.jpg>
+ <p> 图2：SyncMap</p>
+</div>
 
 左边是普通的map，当有读写的时候锁上了，其他线程就无法读写了。右边的是 **concurrentMap** ，他利用了一种 **partition** 的思想，把 **Map** 的内存 **SHARD** （分割）成N份，然后用不同的🔐锁上锁，那么降低了需要资源被锁的概率。
 
