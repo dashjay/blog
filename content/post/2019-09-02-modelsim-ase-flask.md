@@ -37,7 +37,7 @@ docker build . -t verilog-judge
 docker run verilog-judge -v ./modelsim_ase:/root/modelsim_ase -p 33778:5000
 ```
 
-> 内部指定的modelsim_ase来自FPGA微软的免费软件Quartus Lite 中的modelsim组件，
+> 内部指定的modelsim_ase来自FPGA微软的免费软件 **Quartus Lite 中的modelsim组件**
 > docker内部运行的端口是5000，开在外部
 
 **测试**(test)
