@@ -35,11 +35,6 @@ footnotereturnlinkcontents = "↩"
     weight = 60
     url = "/open_source"
 
-[params]
-    highlightjsTheme = "prism"
-    highlightjsVersion = "10.1.2"
-    custom_css = ["css/theme-override.css"]
-
 [markup]
   defaultMarkdownHandler = "goldmark"
     [markup.goldmark]
@@ -63,8 +58,14 @@ footnotereturnlinkcontents = "↩"
 lastmod = ["lastmod", ":fileModTime", ":default"]
 
 
-[Params]
+[params]
+  highlightjsTheme = "prism"
+  highlightjsVersion = "10.1.2"
+  custom_css = ["css/theme-override.css"]
   enableGitalk = true
+  disable_highlight = false
+  highlightjsLang = ["cpp", "golang"]
+
 
 [Params.Gitalk]
     clientID = "790319b9ce1b0f784836"
