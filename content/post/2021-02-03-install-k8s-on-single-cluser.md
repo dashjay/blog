@@ -20,9 +20,7 @@ slug: install-k8s-on-single-cluser
 
 ```bash
 $ cat /proc/version
-Linux version 4.15.0-135-generic (buildd@lgw01-amd64-005) \
- (gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04)) \
- #139-Ubuntu SMP Mon Jan 18 17:38:24 UTC 2021
+Linux version 4.15.0-135-generic (buildd@lgw01-amd64-005)  (gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04)) #139-Ubuntu SMP Mon Jan 18 17:38:24 UTC 2021
 ```
 
 部署 k8s 的时候考虑到性能问题，安全性问题，可用性问题需要做以下操作：
@@ -39,7 +37,7 @@ sudo ufw disable
 
 ## Step1 导入Key安装源
 
-```cpp
+```bash
 apt udpate
 apt-get -y install apt-transport-https ca-certificates curl software-properties-common
 curl -fsSL https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
@@ -47,7 +45,7 @@ curl -fsSL https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-
 
 sudo 编辑源
 
-```cpp
+```bash
 $ cat /etc/apt/sources.list.d/kubernetes.list
 deb http://mirrors.ustc.edu.cn/kubernetes/apt kubernetes-xenial main
 $ apt update 
@@ -55,7 +53,7 @@ $ apt update
 
 ## Step2 安装启动 k8s
 
-```cpp
+```bash
 $ sudo apt-get install -y kubelet kubeadm kubectl
 ```
 
@@ -86,12 +84,12 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 执行下列命令等待所有服务进入 Running 状态，并且数量满足预期
 
-```cpp
+```bash
 kubectl get pods --all-namespaces
 ```
+输出
 
-```cpp
-// 输出
+```bash
 ➜  ~ kubectl get pods --all-namespaces
 NAMESPACE     NAME                                 READY   STATUS    RESTARTS   AGE
 kube-system   coredns-7f89b7bc75-48dpk             1/1     Running   0          18m
@@ -218,7 +216,7 @@ spec:
 
 保存后即可使用 ip:30443 来访问 Dashboard
 
-<img src="/post/2021-02-03-install-k8s-on-single-cluser_files/login.png"  align="center" width="700px">
+![登录Dashboard](/post/2021-02-03-install-k8s-on-single-cluser_files/login.png "700px")
 
 填入 Token 即可进入 Dashboard
 
