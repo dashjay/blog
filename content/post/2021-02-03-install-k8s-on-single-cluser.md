@@ -87,6 +87,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```bash
 kubectl get pods --all-namespaces
 ```
+
 输出
 
 ```bash
