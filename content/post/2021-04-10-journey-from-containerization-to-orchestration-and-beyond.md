@@ -6,6 +6,7 @@ lastModified: '2021-04-10'
 description: ''
 author: 'dashjay'
 tags: ["docker", "kubernetes"]
+draft: true
 slug: journey-from-containerization-to-orchestration-and-beyond
 ---
 

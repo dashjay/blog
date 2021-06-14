@@ -5,6 +5,7 @@ date: '2021-02-03'
 lastModified: '2021-02-03'
 description: ''
 author: 'dashjay'
+draft: true
 tags: ["docker", "kubernetes"]
 slug: install-k8s-on-single-cluser
 ---
