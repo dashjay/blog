@@ -25,9 +25,12 @@ jobs:
       - run: git config --global user.name dashjay
       - run: hugo -d ./dist/
       - run: DATE=$(date)
-      - run: cd dist
-      - run: git init
-      - run: git remote add origin git@github.com/dashjay/dashjay.github.io.git
-      - run: git add .
-      - run: git commit -m "${DATE}"
-      - run: git push origin master -f
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: master
+          force: true
+          directory: ./dist
+          repository: 'git@github.com/dashjay/dashjay.github.io.git'
+
