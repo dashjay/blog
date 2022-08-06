@@ -1,0 +1,29 @@
+name: Push
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: apt-get update -qq
+      - run: wget https://github.com/gohugoio/hugo/releases/download/v0.73.0/hugo_0.73.0_Linux-64bit.deb
+      - run: sudo dpkg -i hugo*.deb
+      - run: echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+      - run: git config --global user.email dashjay@aliyun.com
+      - run: git config --global user.name dashjay
+      - run: hugo -d ./dist/
+      - run: DATE=$(date)
+      - run: cd dist
+      - run: git init
+      - run: git remote add origin git@github.com/dashjay/dashjay.github.io.git
+      - run: git add .
+      - run: git commit -m "${DATE}"
+      - run: git push origin master -f
