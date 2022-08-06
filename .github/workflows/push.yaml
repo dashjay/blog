@@ -9,11 +9,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-
     steps:
-      - uses: actions/checkout@v2
-      - run: mkdir /tmp/hugo && curl https://github.com/gohugoio/hugo/releases/download/v0.101.0/hugo_0.101.0_Linux-64bit.tar.gz | tar -xzvf- -C /tmp/hugo
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+
+      - name: install hugo 
+        run: go install github.com/gohugoio/hugo@latest
+        
       - run: echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
       - run: git config --global user.email dashjay@aliyun.com
       - run: git config --global user.name dashjay
