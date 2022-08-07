@@ -22,6 +22,7 @@ jobs:
 
       - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
       - run: git config --global user.email dashjay@aliyun.com
+      - run: git config --global init.defaultBranch master
       - run: git config --global user.name dashjay
       - run: hugo -d ./dist/
       - run: DATE=$(date)
