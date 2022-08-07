@@ -25,12 +25,7 @@ jobs:
       - run: git config --global user.name dashjay
       - run: hugo -d ./dist/
       - run: DATE=$(date)
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          branch: master
-          force: true
-          directory: ./dist
-          repository: 'dashjay/dashjay.github.io'
+      - run: cd dist && git init & git add -A
+      - run: git remote add origin https://dashjay:${PASSWORD}/dashjay/dashjay.github.io.git
+      - run: git push
 
