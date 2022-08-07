@@ -25,7 +25,7 @@ jobs:
       - run: git config --global user.name dashjay
       - run: hugo -d ./dist/
       - run: DATE=$(date)
-      - run: cd dist && git init & git add -A
+      - run: cd dist && git init & git add -A && git commit -m $DATE
       - run: git remote add origin https://dashjay:${PASSWORD}/dashjay/dashjay.github.io.git
       - run: git push
 
