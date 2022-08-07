@@ -34,6 +34,6 @@ jobs:
         with:
           source-directory: 'dist'
           destination-github-username: 'dashjay'
-          destination-repository-name: 'dashjay.github.iot'
+          destination-repository-name: 'dashjay.github.io'
           user-email: dashjay@aliyun.com
           target-branch: master
