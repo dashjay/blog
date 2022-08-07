@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: recursive
 
       - name: Set up Go
         uses: actions/setup-go@v3
@@ -31,7 +33,7 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
-          source-directory: 'dist'
+          source-directory: './dist'
           destination-github-username: 'dashjay'
           destination-repository-name: 'dashjay.github.io'
           user-email: dashjay@aliyun.com
