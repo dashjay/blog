@@ -25,5 +25,15 @@ jobs:
       - run: git config --global init.defaultBranch master
       - run: git config --global user.name dashjay
       - run: hugo -d ./dist/
-      - run: cd dist && git init & git add -A && git commit -m 'update' && git remote add origin https://dashjay:${PASSWORD}/dashjay/dashjay.github.io.git && git push
 
+      - name: Pushes to another repository
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source-directory: 'dist'
+          destination-github-username: 'dashjay'
+          destination-repository-name: 'dashjay.github.iot'
+          user-email: dashjay@aliyun.com
+          target-branch: master
