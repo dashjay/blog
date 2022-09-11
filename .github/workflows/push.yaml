@@ -20,7 +20,7 @@ jobs:
           go-version: 1.18
 
       - name: install hugo 
-        run: go install github.com/gohugoio/hugo@latest
+        run: CGO_ENABLED=1 go install --tags extended github.com/gohugoio/hugo@latest
 
       - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
       - run: git config --global user.email dashjay@aliyun.com
