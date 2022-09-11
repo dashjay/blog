@@ -1,7 +1,7 @@
 baseurl = "/"
 languageCode = "en-us"
 title = "Dashjay's"
-theme = "hugo-lithium"
+theme = "hugo-theme-stack"
 ignoreFiles = ["\\.Rmd$", "_files$", "_cache$"]
 enableEmoji = true
 footnotereturnlinkcontents = "↩"
@@ -20,14 +20,9 @@ footnotereturnlinkcontents = "↩"
     weight = 5
 
 [[menu.main]]
-    name = "CV"
-    url = "/cv"
+    name = "About"
+    url = "/about"
     weight = 10
-
-[[menu.main]]
-    name = "我在做什么？"
-    url = "/daily"
-    weight = 20
 
 [[menu.main]]
     name = "Contribution"    

@@ -2,3 +2,4 @@ public/
 static/learncpp
 .DS_Store
 .hugo_build.lock
+resources/

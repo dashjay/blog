@@ -1,3 +1,9 @@
 [submodule "themes/hugo-lithium"]
 	path = themes/hugo-lithium
 	url = https://github.com/dashjay/hugo-lithium
+[submodule "themes/hugo-theme-stack"]
+	path = themes/hugo-theme-stack
+	url = https://github.com/dashjay/hugo-theme-stack
+[submodule "themes/themes/hugo-theme-stack"]
+	path = themes/themes/hugo-theme-stack
+	url = https://github.com/dashjay/hugo-theme-stack
