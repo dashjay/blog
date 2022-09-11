@@ -65,6 +65,37 @@ func S3Query(r *http.Request) (q types.S3Query) {
 }
 ```
 
+到目前为止，我们也就是简单了解了一下，aws s3 协议请求和返回值，业务的话也相对简单：创建/删除 bucket，上传、删除 object。
+
+最难的应该是 ListObjectV2，并不是难在实现上，而是需要理解 key 和 linux 树形文件的关系，说道这里要说一下这个 s3 和文件系统的区别。
+
+s3 本质上是一个key-value存储，上传文件的业务就对应文件名为 `key = key_prefix/dir_name/file_name`，内容就是这个文件的content，**本质上 key 只不过是看起来符合 linux 树形文件系统** 的规范而已，如果你要把你的 key 当做是 linux 里的文件目录，key_prefix 是一个文件夹，`dir_name` 是一个文件夹，`file_name` 是一个文件的话，你也可以这么理解。s3 也可以帮你这样做，例如：
+
+如果 S3 里面有这样一些文件：
+
+```
+key_prefix/dir_name1/file_name1
+key_prefix/dir_name2/file_name2
+key_prefix/dir_name3/file_name3
+```
+
+```
+// 我下面的请求 `url` 里的一些字符没有经过 `urlEncode` 转化为 `html` 实体
+
+GET /bucket_name?list-type=2&delimiter=/&prefix=key_prefix/ HTTP/1.1
+x-amz-request-payer: RequestPayer
+x-amz-expected-bucket-owner: ExpectedBucketOwner
+```
+
+如果上面上传的 key 存在，你就会得到 `dir_name1,dir_name2,dir_name3` 这样三个 `common_prefix`。
+
+也就是说，当 `delimiter` 为 `/` 的时候，就会像文件系统那样，按照树形的去分割每个 key，像文件目录那样返回。
+
+如果没有传入 delimiter，就直接返回所有key就好了……（当然一般会限制前1000个，如果传入 start-after 之后，会从第 start-after+1 个开始。
+
+具体的实现在这里：[boss/pkg/s3backend/s3backend.go](https://github.com/dashjay/boss/blob/master/pkg/s3backend/s3backend.go#L211)
+
+
 ## 0x01
 
 
